@@ -1,0 +1,26 @@
+{
+  "name": "failureai",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "FailureAI - all-in-one AI digital marketing agent. Ek search, poora campaign: client research, ad copy, creatives, code, prompts aur 30-day plan.",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "test": "node --test test/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "digital-marketing",
+    "ai-agent",
+    "ad-copy",
+    "client-research",
+    "campaign",
+    "seo",
+    "failureai"
+  ],
+  "license": "MIT"
+}

@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FailureAI — Agent Workspace</title>
+  <meta name="description" content="FailureAI agent workspace: client research, ad factory, creative studio, code lab, prompt library, content calendar aur SEO pack — ek hi jagah." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="__SITE_URL__/app.html" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="theme-color" content="#0B0D12" />
+  <link rel="stylesheet" href="/app.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <a class="logo" href="/" aria-label="FailureAI home">
+        <span class="logo-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#0B0D12"/><path d="M17 15h30v9H27v8h17v9H27v14h-10z" fill="#B8FF3C"/><path d="M44 15h8l-8 10v-10z" fill="#7C5CFF"/></svg></span>
+        <span>Failure<span class="ai">AI</span></span>
+      </a>
+      <div class="side-label">WORKSPACE</div>
+      <button class="workspace-btn" id="newWorkspace"><span class="ws-icon">＋</span> Naya client / search <kbd>⌘K</kbd></button>
+      <div class="side-label">AGENT MODULES</div>
+      <nav class="tool-nav" id="toolNav">
+        <button data-tool="overview" class="active"><i>◎</i><span>Overview</span><em>Poora kit</em></button>
+        <button data-tool="intel"><i>⌕</i><span>Client Intel</span><em>Data & research</em></button>
+        <button data-tool="ads"><i>✦</i><span>Ad Factory</span><em>Copy & variants</em></button>
+        <button data-tool="creative"><i>▣</i><span>Creative Studio</span><em>Images & video</em></button>
+        <button data-tool="code"><i>&lt;/&gt;</i><span>Code & Tracking</span><em>Pixel, UTM, JSON-LD</em></button>
+        <button data-tool="prompts"><i>❝</i><span>Prompt Library</span><em>Reusable prompts</em></button>
+        <button data-tool="calendar"><i>▦</i><span>30-Day Calendar</span><em>Posts & KPIs</em></button>
+        <button data-tool="seo"><i>↗</i><span>SEO Pack</span><em>Meta, FAQ, schema</em></button>
+      </nav>
+      <div class="side-label">SAVED</div>
+      <nav class="tool-nav secondary">
+        <button data-tool="history"><i>◷</i><span>History</span><em id="historyCount">0 runs</em></button>
+      </nav>
+      <div class="side-foot">
+        <div class="mode-card">
+          <div class="mode-row"><span class="mode-dot" id="modeDot"></span><b id="modeTitle">Checking…</b></div>
+          <p id="modeDesc">Server se connect ho raha hoon…</p>
+        </div>
+        <button class="settings-link" id="openSettings">⚙ Settings & API keys</button>
+        <a class="settings-link" href="/">← Public site</a>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main">
+      <header class="topbar">
+        <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+        <form class="global-search" id="globalSearch">
+          <span class="s-ico">⌕</span>
+          <input id="queryInput" type="text" placeholder="Kisi bhi client, brand, URL ya product ka naam likho…" autocomplete="off" aria-label="Client query" />
+          <select id="quickLang" aria-label="Language">
+            <option value="hinglish">Hinglish</option>
+            <option value="hindi">हिंदी</option>
+            <option value="english">English</option>
+          </select>
+          <button class="gs-run" type="submit">Full campaign <span>↵</span></button>
+        </form>
+        <div class="top-actions">
+          <div class="export-menu">
+            <button class="icon-btn" id="exportToggle" title="Export">⇩ <span>Export</span></button>
+            <div class="export-drop" id="exportDrop">
+              <button data-export="json">↓ Download JSON (poora kit)</button>
+              <button data-export="md">↓ Download Markdown report</button>
+              <button data-export="ads">↓ Ads CSV (variants)</button>
+              <button data-export="calendar">↓ Calendar CSV</button>
+              <button data-export="copy">⧉ Copy all as text</button>
+              <button data-export="print">⎙ Print / PDF</button>
+            </div>
+          </div>
+          <button class="icon-btn" id="openSettingsTop" title="Settings">⚙</button>
+        </div>
+      </header>
+
+      <div class="context-bar" id="contextBar">
+        <div class="ctx-left"><span class="ctx-dot"></span><span id="ctxBrand">Koi campaign nahi chalayi abhi</span><span class="ctx-sep">/</span><span id="ctxMeta">ek search se shuru karo</span></div>
+        <div class="ctx-right" id="ctxChips"></div>
+      </div>
+
+      <div class="progress" id="progress" hidden>
+        <div class="progress-top"><span class="spinner"></span><b id="progressTitle">Agent kaam kar raha hai…</b><span id="progressStep">1 / 5</span></div>
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-log" id="progressLog">Client ka context samajh raha hoon…</div>
+      </div>
+
+      <main id="content" class="content"></main>
+    </div>
+  </div>
+
+  <!-- SETTINGS DRAWER -->
+  <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
+  <aside class="drawer" id="settingsDrawer" aria-label="Settings">
+    <div class="drawer-head"><div><span class="kicker">CONFIGURATION</span><h3>Settings</h3></div><button class="close-drawer" id="closeSettings" aria-label="Close">✕</button></div>
+    <div class="drawer-body">
+      <section class="set-group">
+        <h4>AI Provider</h4>
+        <label>Provider
+          <select id="setProvider">
+            <option value="auto">Auto (server key → Local Engine)</option>
+            <option value="local">Local Engine (always free, offline)</option>
+            <option value="openai">OpenAI / compatible gateway</option>
+            <option value="gemini">Google Gemini</option>
+            <option value="anthropic">Anthropic Claude</option>
+          </select>
+        </label>
+        <label>API key (BYOK — sirf is server par bheji jati hai)
+          <input id="setApiKey" type="password" placeholder="sk-… (blank = server .env key)" autocomplete="off" />
+        </label>
+        <div class="set-note">Public deploy par key <b>.env</b> me rakhein, browser me nahi. Bina key ke bhi Local Engine poora kit deta hai.</div>
+        <label class="check"><input type="checkbox" id="setResearch" /> <span>Live web research on karein (client data ke liye; server par SEARCH_API_KEY chahiye)</span></label>
+      </section>
+      <section class="set-group">
+        <h4>Output</h4>
+        <div class="set-grid">
+          <label>Language<select id="setLanguage"><option value="hinglish">Hinglish</option><option value="hindi">हिंदी</option><option value="english">English</option></select></label>
+          <label>Tone<select id="setTone"><option value="bold">Bold</option><option value="friendly">Friendly</option><option value="premium">Premium</option><option value="witty">Witty</option></select></label>
+          <label>Goal<select id="setGoal"><option value="leads">Leads</option><option value="sales">Sales</option><option value="awareness">Awareness</option><option value="traffic">Traffic</option></select></label>
+          <label>City / market<input id="setCity" type="text" placeholder="Delhi (optional)" /></label>
+        </div>
+        <label>Offer (ad copy me use hoga)<input id="setOffer" type="text" placeholder="free consultation & 7-day trial" /></label>
+        <label>Audience hint<input id="setAudience" type="text" placeholder="small business owners, 25–40" /></label>
+        <label>Extra notes / context<textarea id="setNotes" rows="3" placeholder="Pricing, USP, competitors, current ad spend…"></textarea></label>
+        <label>Image render endpoint<input id="setImageEndpoint" type="text" placeholder="https://image.pollinations.ai/prompt/" /></label>
+      </section>
+      <section class="set-group">
+        <h4>Connection</h4>
+        <div id="connectionStatus" class="conn-status">Check kar rahe hain…</div>
+        <button class="btn btn-ghost full" id="checkConnection">↻ Connection check karo</button>
+      </section>
+    </div>
+    <div class="drawer-foot"><button class="btn btn-primary full" id="saveSettings">Save settings</button><button class="btn btn-ghost full" id="resetSettings">Defaults reset karo</button></div>
+  </aside>
+
+  <div class="toast-wrap" id="toasts" aria-live="polite"></div>
+
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>
